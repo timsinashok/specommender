@@ -1,8 +1,16 @@
 from flask import Flask, render_template, request
 from inference_sdk import InferenceHTTPClient
+import json
 import os
 
 app = Flask(__name__)
+
+def read_api_key(file_path):
+    with open(file_path, 'r') as f:
+        secrets = json.load(f)
+    return secrets.get('api', {}).get('api_key')
+
+model_api_key = read_api_key('secrets.json')
 
 @app.route('/')
 def upload_form():
@@ -20,8 +28,7 @@ def process_image():
     # Initialize the InferenceHTTPClient
     CLIENT = InferenceHTTPClient(
         api_url="https://detect.roboflow.com",
-        api_key="JemAXJ2X7SOptsVPKxrG"
-    )
+        api_key= model_api_key    )
 
     # Infer using the uploaded image
     result = CLIENT.infer(uploaded_image_path, model_id="face-shape-detection/1")
