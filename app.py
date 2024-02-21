@@ -36,9 +36,11 @@ def process_image():
     # Remove the temporary uploaded image file
     os.remove(uploaded_image_path)
 
-    return render_template('results.html', result=result)
+    class_name = result['predictions'][0]['class']
+
+    return render_template('results.html', result=class_name)
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=8000, debug=True)
+    app.run(host="localhost", port=8001, debug=True)
 
 
