@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Items</title>
+</head>
+<body>
+    <h1>Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Face Type</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item[1] }}</td> <!-- itemName -->
+                <td>{{ item[2] }}</td> <!-- itemDescription -->
+                <td>{{ item[3] }}</td> <!-- itemPrice -->
+                <td>{{ item[4] }}</td> <!-- itemFaceType -->
+                <td><img src="{{ url_for('static', filename='images/' + item[5]) }}" alt="Item Image" style="max-width: 100px;"></td> <!-- imageName -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
