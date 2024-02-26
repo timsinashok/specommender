@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="author" content="colorlib.com">
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,800" rel="stylesheet" />
-  <link href="css/main.css" rel="stylesheet" />
+  <link href="../static/css/main.css" rel="stylesheet" />
   <style>
     /* Add custom styles for the logo */
     .logo {
@@ -25,7 +25,7 @@
     <header>
       <!-- Logo -->
       <div class="logo">
-        <img src="images/logo.png" alt="Specommender Logo">
+        <img src="../static/images/logo.png" alt="Specommender Logo">
       </div>
 
       <!-- Form and other header content -->
@@ -34,11 +34,12 @@
           <legend>Get glasses that perfectly suit you.</legend>
           <div class="inner-form">
             <div class="input-field">
-              <input class="form-control" id="choices-text-preset-values" type="text" placeholder="Type your face type......" />
+              <input class="form-control" id="choices-text-preset-values" type="text" placeholder="Type your face type or user picture.............. here" />
               <button class="btn-search" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
+              <!--  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-                </svg>
+                </svg> -->
               </button>
             </div>
           </div>
@@ -51,7 +52,7 @@
       </form>
     </header>
   </div>
-  <script src="js/extention/choices.js"></script>
+  <script src="../static/js/extention/choices.js"></script>
   <script>
     var textPresetVal = new Choices('#choices-text-preset-values',
     {

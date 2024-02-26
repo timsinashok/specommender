@@ -970,3 +970,14 @@ legend {
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
+.button_search{
+  background-color: #00BCD4;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 10px;
+}
