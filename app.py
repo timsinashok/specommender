@@ -31,7 +31,7 @@ model_api_key = read_api_key('secrets.json')
 @app.route('/') 
 @app.route('/home') 
 def main():
-    return render_template('base.html')
+    return render_template('index.html')
 
 
 @app.route('/', methods=['POST'])
