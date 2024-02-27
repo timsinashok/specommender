@@ -124,9 +124,18 @@ def display_items():
     items = get_all_items()
     return render_template('display_items.html', items=items)
 
+@app.route('/process_input', methods=['POST'])
+def process_input():
+    input_value = request.json['inputValue']
+    # Process the input value here
+    print('Received input:', input_value)
+    return 'Input received successfully'
+
 
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8001, debug=True)
+
+
 
 
