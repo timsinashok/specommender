@@ -8,6 +8,7 @@ import sqlite3
 from db import get_db
 
 app = Flask(__name__)
+app.secret_key = '34242' 
 
 # Initialize the database if it doesn't exist
 connect = sqlite3.connect('database.db') 
@@ -106,6 +107,8 @@ def add_item():
                                 VALUES (?, ?, ?, ?, ?)",
                                (item_name, item_description, item_price, item_face_type, filename))
                 conn.commit()
+                respo = item_name, filename, 'added successfully'
+                print(respo)
             return redirect(url_for('main'))
     else:
         return render_template('add_item.html')
