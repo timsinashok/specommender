@@ -13,80 +13,72 @@
         border: 1px solid #ccc; /* Add border */
     }
 </style>
-      <!-- Form and other header content -->
-      <form id="imageForm" method="POST" action="/search_results">
-        <fieldset>
-            <legend>Get glasses that perfectly suit you.</legend>
-            <div class="inner-form">
-                <div class="input-field">
-                    <input class="form-control-new" id="textInput" name="text_input" type="text" placeholder="Type your face type or upload a picture..." onkeypress="handleKeyPress(event)">
-                    <button class="btn-search" type="button" onclick="document.getElementById('imageUpload').click()">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
-                    </button>
-                    <input type="file" id="imageUpload" name="image_upload" accept="image/*" style="display: none;" onchange="submitForm()">
-                </div>
+<!-- Form and other header content -->
+<form id="imageForm" method="POST" action="/search_result" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Get glasses that perfectly suit you.</legend>
+        <div class="inner-form">
+            <div class="input-field">
+                <input class="form-control-new" id="textInput" name="text_input" type="text" placeholder="Type your face type or upload a picture..." onkeypress="handleKeyPress(event)">
+                <button class="btn-search" type="button" onclick="document.getElementById('imageUpload').click()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>
+                </button>
+                <input type="file" id="imageUpload" name="image_upload" accept="image/*" style="display: none;" onchange="submitForm()">
             </div>
-            <div class="suggestion-wrap">
-                <span>New Arrivals</span>
-                <span>Manual Search</span>
-                <span>Sale</span>
-            </div>
-        </fieldset>
-    </form>
-    
-    <script>
-        function submitForm() {
-            document.getElementById('imageForm').submit();
-        }
-        // Function to handle form submission
-        function submitForm(event) {
-            event.preventDefault(); // Prevent default form submission
-            
-            var inputValue = document.getElementById('searchInput').value; // Get the value of the input field
-            
-            // Send an AJAX request to your Flask backend
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/process_input', true); // Replace '/process_input' with your Flask route
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.onload = function () {
-                if (xhr.status == 200) {
-                    console.log('Input submitted successfully');
-                    // Handle successful response from the server
-                } else {
-                    console.error('Error submitting input:', xhr.statusText);
-                    // Handle error response from the server
-                }
-            };
-            xhr.send(JSON.stringify({inputValue: inputValue})); // Send input value as JSON
-        }
-        
-        // Function to handle keypress event on the input field
-        function handleKeyPress(event) {
-            if (event.keyCode === 13) { // Check if Enter key is pressed
-                submitForm(event); // Call submitForm function to submit the form
-            }
-        }
+        </div>
+        <div class="suggestion-wrap">
+            <span>New Arrivals</span>
+            <span>Manual Search</span>
+            <span>Sale</span>
+        </div>
+    </fieldset>
+</form>
 
-         function handleImageUpload(event) {
-            var imageFile = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var imageData = event.target.result;
-                // Process the uploaded image data here
-                console.log('Image uploaded successfully:', imageData);
-            };
-            reader.readAsDataURL(imageFile);
+<script>
+    function submitForm() {
+        document.getElementById('imageForm').submit();
+    }
+
+    // Function to handle form submission
+    function handleSubmit(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var inputValue = document.getElementById('textInput').value; // Get the value of the input field
+
+        // Send an AJAX request to your Flask backend
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/process_input', true); // Replace '/process_input' with your Flask route
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                console.log('Input submitted successfully');
+                // Handle successful response from the server
+            } else {
+                console.error('Error submitting input:', xhr.statusText);
+                // Handle error response from the server
+            }
+        };
+        xhr.send(JSON.stringify({inputValue: inputValue})); // Send input value as JSON
+    }
+
+    // Function to handle keypress event on the input field
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) { // Check if Enter key is pressed
+            handleSubmit(event); // Call handleSubmit function to submit the form
         }
-        function handleImageUpload(event) {
-            var imageFile = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var imageData = event.target.result;
-                // Process the uploaded image data here
-                console.log('Image uploaded successfully:', imageData);
-            };
-            reader.readAsDataURL(imageFile);
-        }
-    </script>
+    }
+
+    // Function to handle image upload
+    function handleImageUpload(event) {
+        var imageFile = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var imageData = event.target.result;
+            // Process the uploaded image data here
+            console.log('Image uploaded successfully:', imageData);
+        };
+        reader.readAsDataURL(imageFile);
+    }
+</script>
 
 {% endblock %}

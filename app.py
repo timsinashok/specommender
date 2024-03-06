@@ -10,15 +10,6 @@ from db import get_db
 app = Flask(__name__)
 app.secret_key = '34242' 
 
-# Initialize the database if it doesn't exist
-connect = sqlite3.connect('database.db') 
-cursor = connect.cursor()
-cursor.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='items'")
-if cursor.fetchone()[0] == 0:
-    connect.execute(
-        "CREATE TABLE items ( itemId INTEGER PRIMARY KEY, itemName TEXT NOT NULL, itemDescription TEXT, itemPrice REAL NOT NULL, itemFaceType TEXT, imageName TEXT NOT NULL)") 
-connect.close()
-
 # Read the API key from the secrets.json file
 def read_api_key(file_path):
     with open(file_path, 'r') as f:
@@ -35,30 +26,41 @@ def main():
     return render_template('index.html')
 
 
-@app.route('/', methods=['POST'])
-def process_image():
-    # Get the uploaded image file from the request
-    file = request.files['file']
+@app.route('/search_result', methods=['POST'])  # Endpoint for form submission
+def search_results():
+    text_input = request.form['text_input']
+    image_file = request.files['image_upload']
 
-    # Save the uploaded image to a temporary location
-    uploaded_image_path = "uploaded_image.jpg"
-    file.save(uploaded_image_path)
+    if image_file:  # If an image is uploaded
+        uploaded_image_path = "uploaded_image.jpg"
+        image_file.save(uploaded_image_path)
 
-    # Initialize the InferenceHTTPClient
-    CLIENT = InferenceHTTPClient(
-        api_url="https://detect.roboflow.com",
-        api_key= model_api_key    )
+        CLIENT = InferenceHTTPClient(
+            api_url="https://detect.roboflow.com",
+            api_key=model_api_key  # Replace with your actual API key
+        )
 
-    # Infer using the uploaded image
-    result = CLIENT.infer(uploaded_image_path, model_id="face-shape-detection/1")
+        result = CLIENT.infer(uploaded_image_path, model_id="face-shape-detection/1")
 
-    # Remove the temporary uploaded image file
-    os.remove(uploaded_image_path)
+        os.remove(uploaded_image_path)
 
-    class_name = result['predictions'][0]['class']
+        class_name = result['predictions'][0]['class']
+        return render_template('results.html', result=class_name)
 
-    return render_template('results.html', result=class_name)
-    
+    elif text_input:  # If text input is provided
+        # Process text input
+        return render_template('results.html', result=text_input)
+
+    else:
+        return "No input provided."
+
+
+@app.route('/process_input', methods=['POST'])
+def process_input():
+    input_value = request.json['inputValue']
+    # Process the input value here
+    print('Received input:', input_value)
+    return 'Input received successfully'
 
 
 ## setup for file UPLoads
@@ -127,18 +129,7 @@ def display_items():
     items = get_all_items()
     return render_template('display_items.html', items=items)
 
-@app.route('/process_input', methods=['POST'])
-def process_input():
-    input_value = request.json['inputValue']
-    # Process the input value here
-    print('Received input:', input_value)
-    return 'Input received successfully'
-
-
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8001, debug=True)
-
-
-
 
