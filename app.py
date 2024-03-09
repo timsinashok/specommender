@@ -45,7 +45,9 @@ def search_results():
         os.remove(uploaded_image_path)
 
         class_name = result['predictions'][0]['class']
-        return render_template('results.html', result=class_name)
+
+        items = get_items_by_face_type(class_name)
+        return render_template('results.html', result=class_name, items=items)
 
     elif text_input:  # If text input is provided
         # Process text input
@@ -54,6 +56,13 @@ def search_results():
     else:
         return "No input provided."
 
+# Function to fetch items from the database based on face type
+def get_items_by_face_type(face_type):
+    with sqlite3.connect("database.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM items WHERE itemFaceType = ?", (face_type,))
+        items = cursor.fetchall()
+    return items
 
 @app.route('/process_input', methods=['POST'])
 def process_input():

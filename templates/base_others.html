@@ -17,9 +17,36 @@
     .logo img {
       width: 300px; /* Adjust width as needed */
       height: auto; /* Maintain aspect ratio */
-}
+    }
+    /* CSS code for setting background */
+    body {
+      background-image: url('path/to/your/image.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .content {
+      text-align: center; /* Optionally center-align text within the container */
+    }
   </style>
 </head>
+
+
 <body>
+  <body style="background-image: url('/static/images/background.jpeg'); background-size: cover; background-repeat: no-repeat;">
+  
+  <header>
+    <!-- Logo -->
+    <div class="logo">
+      <img src="../static/images/logo.png" alt="Specommender Logo">
+    </div>
+  </header>
+  <div class = content>
     {% block content %} {% endblock %}
+  </div>
 </body>
