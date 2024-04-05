@@ -50,11 +50,12 @@ def search_results():
         return render_template('results.html', result=class_name, items=items)
 
     elif text_input:  # If text input is provided
-        # Process text input
-        return render_template('results.html', result=text_input)
-
+        if text_input in ['oval', 'round', 'square', 'heart', 'oblong', 'diamond']:
+            items = get_items_by_face_type(text_input)
+            return render_template('results.html', result=text_input, items=items)
     else:
         return "No input provided."
+
 
 # Function to fetch items from the database based on face type
 def get_items_by_face_type(face_type):
