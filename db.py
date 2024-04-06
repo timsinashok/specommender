@@ -1,7 +1,27 @@
 import sqlite3
-
+import os
 import click
 from flask import current_app, g
+
+# Create the database if it doesn't exist
+def create_database():
+    if not os.path.exists("database.db"):
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS items (
+                id INTEGER PRIMARY KEY,
+                itemName TEXT NOT NULL,
+                itemDescription TEXT,
+                itemPrice REAL,
+                itemFaceType TEXT,
+                imageName TEXT
+            )
+        """)
+        conn.commit()
+        conn.close()
+
+
 
 
 def get_db():

@@ -5,7 +5,10 @@ import json
 import os
 import sqlite3 
 
-from db import get_db
+from db import get_db, create_database
+
+# Create the database if it doesn't exist
+create_database()
 
 app = Flask(__name__)
 app.secret_key = '34242' 
@@ -60,6 +63,7 @@ def search_results():
 # Function to fetch items from the database based on face type
 def get_items_by_face_type(face_type):
     with sqlite3.connect("database.db") as conn:
+        conn.row_factory = sqlite3.Row  # Use the sqlite3.Row factory
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM items WHERE itemFaceType = ?", (face_type,))
         items = cursor.fetchall()
@@ -124,6 +128,7 @@ def add_item():
             return redirect(url_for('main'))
     else:
         return render_template('add_item.html')
+
 
 # Function to fetch all items from the database
 def get_all_items():
