@@ -1,0 +1,27 @@
+[
+    {
+      "itemName": "Blizzard ",
+      "itemDescription": "Square Dark Tortoise Eyeglasses",
+      "itemPrice": 35,
+      "imageName": "blizzard.png",
+      "destination": "https://www.eyebuydirect.com/eyeglasses/frames/blizzard-dark-tortoise-m-13483",
+      "itemFaceType": "oval"
+    },
+    {
+      "itemName": "Alchemist",
+      "itemDescription": "Round Tortoise Eyeglasses",
+      "itemPrice": 69,
+      "imageName": "Alchemist.png",
+      "destination": "https://www.eyebuydirect.com/eyeglasses/frames/alchemist-tortoise-m-19849",
+      "itemFaceType": "oval"
+    },
+    {
+      "itemName": "Antone",
+      "itemDescription": "Round Gold Eyeglasses",
+      "itemPrice": 80,
+      "imageName": "Antone.png",
+      "destination": "https://www.eyebuydirect.com/eyeglasses/frames/antone-gold-l-23804",
+      "itemFaceType": "oval"
+    }
+  ] 
+  

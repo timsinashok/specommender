@@ -4,14 +4,21 @@ from werkzeug.utils import secure_filename
 import json
 import os
 import sqlite3 
+import json
 
-from db import get_db, create_database
+
+# Import the functions from db.py
+from db import *
+
+app = Flask(__name__)
+app.secret_key = '34242' 
 
 # Create the database if it doesn't exist
 create_database()
 
-app = Flask(__name__)
-app.secret_key = '34242' 
+# Populate the database if it is empty
+populate_database()
+
 
 # Read the API key from the secrets.json file
 def read_api_key(file_path):
@@ -46,28 +53,22 @@ def search_results():
         result = CLIENT.infer(uploaded_image_path, model_id="face-shape-detection/1")
 
         os.remove(uploaded_image_path)
-
         class_name = result['predictions'][0]['class']
 
+        message = f"Detected face shape: {class_name}. \n  Here are the best suited glasses for you ....." 
+
         items = get_items_by_face_type(class_name)
-        return render_template('results.html', result=class_name, items=items)
+        return render_template('results.html', result=message, items=items)
 
     elif text_input:  # If text input is provided
         if text_input in ['oval', 'round', 'square', 'heart', 'oblong', 'diamond']:
             items = get_items_by_face_type(text_input)
-            return render_template('results.html', result=text_input, items=items)
+            message = f"Here are the best suited glasses for your face shape: {text_input}"
+
+            return render_template('results.html', result=message, items=items)
     else:
         return "No input provided."
 
-
-# Function to fetch items from the database based on face type
-def get_items_by_face_type(face_type):
-    with sqlite3.connect("database.db") as conn:
-        conn.row_factory = sqlite3.Row  # Use the sqlite3.Row factory
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM items WHERE itemFaceType = ?", (face_type,))
-        items = cursor.fetchall()
-    return items
 
 @app.route('/process_input', methods=['POST'])
 def process_input():
@@ -78,7 +79,7 @@ def process_input():
 
 
 ## setup for file UPLoads
-UPLOAD_FOLDER = 'assets/images'
+UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 # Ensure the upload folder exists, create if not
 if not os.path.exists(UPLOAD_FOLDER):
@@ -115,20 +116,20 @@ def add_item():
             item_price = request.form['itemPrice']
             item_face_type = request.form['itemFaceType']
             filename = secure_filename(file.filename)
+            link = request.form['link']
             # Save other form data and file path to the database
             with sqlite3.connect("database.db") as conn:
                 cursor = conn.cursor()
                 cursor.execute("INSERT INTO items \
-                                (itemName, itemDescription, itemPrice, itemFaceType, imageName) \
-                                VALUES (?, ?, ?, ?, ?)",
-                               (item_name, item_description, item_price, item_face_type, filename))
+                                (itemName, itemDescription, itemPrice, itemFaceType, imageName, destination) \
+                                VALUES (?, ?, ?, ?, ?, ?)",
+                               (item_name, item_description, item_price, item_face_type, filename, link))
                 conn.commit()
                 respo = item_name, filename, 'added successfully'
                 print(respo)
             return redirect(url_for('main'))
     else:
         return render_template('add_item.html')
-
 
 # Function to fetch all items from the database
 def get_all_items():

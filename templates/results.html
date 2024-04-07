@@ -12,7 +12,7 @@
     }
 
     .container {
-        max-width: 500px;
+        max-width: 800px; /* Increased container width for gallery view */
         margin: 20px auto;
         padding: 20px;
         background-color: #2a3231;
@@ -26,22 +26,25 @@
         color: #ffffff;
     }
 
-    /* New styles for grid layout */
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* New styles for gallery layout */
+    .gallery-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
         gap: 20px;
     }
 
-    .item {
+    .gallery-item {
+        width: calc(33.33% - 20px); /* Adjust the width based on your preference */
         background-color: #2a3231;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         padding: 20px;
         color: #ccc;
+        text-align: center;
     }
 
-    .item img {
+    .gallery-item img {
         width: 100%;
         border-radius: 5px;
     }
@@ -51,12 +54,12 @@
     }
 </style>
 <div class="container">
-    <h2>Search results for {{ result }} facetype.</h2>
+    <h2> {{ result }} </h2>
 
-    <div class="grid-container">
+    <div class="gallery-container">
         {% if items %}
             {% for item in items %}
-                <div class="item">
+                <a href="{{ item['link'] }}" class="gallery-item"> <!-- Wrap entire gallery item in anchor tag -->
                     <img src="{{ url_for('static', filename='images/' + item['imageName']) }}" alt="{{ item['itemName'] }}">
                     <div class="details">
                         <h3>{{ item['itemName'] }}</h3>
@@ -64,11 +67,12 @@
                         <p><strong>Price:</strong> ${{ item['itemPrice'] }}</p>
                         <p><strong>Face Type:</strong> {{ item['itemFaceType'] }}</p>
                     </div>
-                </div>
+                </a>
             {% endfor %}
         {% else %}
             <p>No items found for the given face type.</p>
         {% endif %}
     </div>
 </div>
+
 {% endblock %}
