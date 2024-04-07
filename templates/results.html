@@ -12,14 +12,18 @@
     }
 
     .container {
-        max-width: 800px; /* Increased container width for gallery view */
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #2a3231;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        color: #ccc;
-    }
+    position: fixed;
+    top: 10%;
+    left: 5%;
+    width: 90%; /* Covering 90% of the screen */
+    height: 90%; /* Covering 90% of the screen */
+    padding: 20px;
+    background-color: rgba(42, 50, 49, 0.4); /* Transparent background with a slight tint */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #ccc;
+    overflow: auto; /* Enable scrolling if content overflows */
+}
 
     h2 {
         text-align: center;
