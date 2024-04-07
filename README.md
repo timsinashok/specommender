@@ -1,6 +1,13 @@
-# Specommender (Under construction ....... )
+# Specommender 
 
 This is a Flask-based web application for spectacles and sunglasses recommendations based on face type. Users can upload images of their faces or use the camera of their system to take a picture and get recommendations on glasses. The app also provides an admin view where the admin can upload new items to the database of the application.  
+
+
+Sample images of the application are shown below:
+
+![Search Result](static/images/search.png)
+
+
 ## Table of Contents
 
 - [Installation](#installation)

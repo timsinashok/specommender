@@ -59,7 +59,7 @@
     <div class="gallery-container">
         {% if items %}
             {% for item in items %}
-                <a href="{{ item['link'] }}" class="gallery-item"> <!-- Wrap entire gallery item in anchor tag -->
+                <a href="{{ item['destination'] }}" class="gallery-item"> <!-- Wrap entire gallery item in anchor tag -->
                     <img src="{{ url_for('static', filename='images/' + item['imageName']) }}" alt="{{ item['itemName'] }}">
                     <div class="details">
                         <h3>{{ item['itemName'] }}</h3>
