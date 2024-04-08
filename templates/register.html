@@ -1,0 +1,96 @@
+{% extends 'base_others.html'%}
+
+{% block content %}
+<style>
+    /* Existing styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #231d1d;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40%; /* Adjust width as needed */
+        padding: 20px;
+        background-color: rgba(42, 50, 49, 0.4); /* Transparent background with a slight tint */
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        color: #ccc;
+        overflow: auto; /* Enable scrolling if content overflows */
+    }
+
+    h2 {
+        text-align: center;
+        color: #ffffff;
+    }
+
+    /* Registration form styles */
+    form {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px; /* Rounded corners */
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="container">
+    <h2> {{ result }} </h2>
+
+    <!-- Registration form -->
+    <form action="/register" method="POST">
+        <h2>Register for specommender</h2>
+        
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+
+        <input type="submit" value="Register">
+        Already have an account? <a href="{{ url_for('login') }}">Login</a>
+    </form>
+</div>
+
+{% endblock %}

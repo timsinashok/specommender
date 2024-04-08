@@ -145,6 +145,13 @@ def display_items():
     items = get_all_items()
     return render_template('display_items.html', items=items)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8001, debug=True)
