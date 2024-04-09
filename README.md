@@ -5,7 +5,7 @@ This is a Flask-based web application for spectacles and sunglasses recommendati
 
 Sample images of the application are shown below:
 
-![Search Result](static/images/search.png)
+![Search Result](static/images/screenshot.png)
 
 
 ## Table of Contents
