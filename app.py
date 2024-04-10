@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from inference_sdk import InferenceHTTPClient
 from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 import json
 import os
 import sqlite3 
@@ -11,7 +13,61 @@ import json
 from db import *
 
 app = Flask(__name__)
-app.secret_key = '34242' 
+app.config['SECRET_KEY'] = '34242'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+login_db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin, login_db.Model):
+    __tablename__ = 'users'
+    id = login_db.Column(login_db.Integer, primary_key=True)
+    username = login_db.Column(login_db.String(100), unique=True, nullable=False)
+    email = login_db.Column(login_db.String(100), unique=True, nullable=False)
+    password = login_db.Column(login_db.String(100), nullable=False)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    return render_template('admin.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:  # This is simplified. Use secure password hashing in production
+            login_user(user)
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('admin'))
+        else:
+            flash('Login unsuccessful. Please check your username and password.', 'error')
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = password
+
+        new_user = User(username=username, email=email, password=hashed_password)
+        login_db.session.add(new_user)
+        login_db.session.commit()
+        flash('Registration successful. You can now log in.', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
 
 # Create the database if it doesn't exist
 create_database()
@@ -145,13 +201,16 @@ def display_items():
     items = get_all_items()
     return render_template('display_items.html', items=items)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('login.html')
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     username = request.form['username']
+#     password = request.form['password']
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    return render_template('register.html')
+#     return render_template('login.html')
+
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(host="localhost", port=8001, debug=True)
