@@ -17,7 +17,7 @@ app.config['SECRET_KEY'] = '34242'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
+# database for login
 login_db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -28,6 +28,11 @@ class User(UserMixin, login_db.Model):
     username = login_db.Column(login_db.String(100), unique=True, nullable=False)
     email = login_db.Column(login_db.String(100), unique=True, nullable=False)
     password = login_db.Column(login_db.String(100), nullable=False)
+
+# # initializing hte database
+# login_db.init_app(app)
+with app.app_context():
+    login_db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -45,7 +50,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:  # This is simplified. Use secure password hashing in production
+        if user and user.password == password: 
             login_user(user)
             next_page = request.args.get('next')
             return redirect(next_page or url_for('admin'))
@@ -62,11 +67,20 @@ def register():
         password = request.form['password']
         hashed_password = password
 
-        new_user = User(username=username, email=email, password=hashed_password)
-        login_db.session.add(new_user)
-        login_db.session.commit()
-        flash('Registration successful. You can now log in.', 'success')
-        return redirect(url_for('login'))
+        # Check if the username or email already exists
+        existing_user = User.query.filter_by(username=username).first()
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_user:
+            return 'Username already exists!'
+        elif existing_email:
+            return 'Email already exists!'
+        else:
+            # Create a new user and add to the database
+            new_user = User(username=username, email=email, password=password)
+            login_db.session.add(new_user)
+            login_db.session.commit()
+            return 'User registered successfully!'
+    
     return render_template('register.html')
 
 # Create the database if it doesn't exist
